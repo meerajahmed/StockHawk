@@ -3,8 +3,13 @@ package com.sam_chordas.android.stockhawk.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.google.android.gms.gcm.GcmNetworkManager;
 import com.google.android.gms.gcm.TaskParams;
+import com.sam_chordas.android.stockhawk.R;
 
 /**
  * Created by sam_chordas on 10/1/15.
@@ -28,6 +33,24 @@ public class StockIntentService extends IntentService {
     }
     // We can call OnRunTask from the intent service to force it to run immediately instead of
     // scheduling a task.
-    stockTaskService.onRunTask(new TaskParams(intent.getStringExtra("tag"), args));
+
+    Handler handler = new Handler(getMainLooper());
+    int result = stockTaskService.onRunTask(new TaskParams(intent.getStringExtra("tag"), args));
+
+    if( result == GcmNetworkManager.RESULT_FAILURE){
+      handler.post(new Runnable() {
+        @Override
+        public void run() {
+          Toast.makeText(getApplicationContext(), R.string.stock_info_error, Toast.LENGTH_LONG).show();
+        }
+      });
+    } else if( result == StockTaskService.INVALID_SYMBOL){
+      handler.post(new Runnable() {
+        @Override
+        public void run() {
+          Toast.makeText(getApplicationContext(), R.string.stock_symbol_invalid, Toast.LENGTH_LONG).show();
+        }
+      });
+    }
   }
 }

@@ -36,6 +36,8 @@ import java.util.Locale;
  * and is used for the initialization and adding task as well.
  */
 public class StockTaskService extends GcmTaskService {
+
+    public static final int INVALID_SYMBOL = -1;
     private String LOG_TAG = StockTaskService.class.getSimpleName();
 
     private OkHttpClient client = new OkHttpClient();
@@ -134,33 +136,23 @@ public class StockTaskService extends GcmTaskService {
                         mContext.getContentResolver().update(QuoteProvider.Quotes.CONTENT_URI, contentValues,
                                 null, null);
                     }
-                    mContext.getContentResolver().applyBatch(QuoteProvider.AUTHORITY,
-                            Utils.quoteJsonToContentVals(getResponse));
 
+                    ArrayList quoteContentValues = Utils.quoteJsonToContentVals(getResponse);
+                    if( quoteContentValues != null && quoteContentValues.size() > 0 ){
+                        mContext.getContentResolver().applyBatch(QuoteProvider.AUTHORITY, quoteContentValues);
+                    } else {
+                        result = StockTaskService.INVALID_SYMBOL;
+                    }
                 } catch (RemoteException | OperationApplicationException e) {
+                    result = GcmNetworkManager.RESULT_FAILURE;
                     Log.e(LOG_TAG, "Error applying batch insert", e);
                 }
             } catch (IOException e) {
+                result = GcmNetworkManager.RESULT_FAILURE;
                 e.printStackTrace();
             }
         }
-
         return result;
     }
-
-   /* private void updateQuotHistory() {
-        Cursor cursor = mContext.getContentResolver().query(QuoteProvider.Quotes.CONTENT_URI,
-                new String[]{ "Distinct " + QuoteColumns.SYMBOL }, null, null, null);
-        if( cursor != null ){
-            mContext.getContentResolver().delete(QuoteProvider.QuoteHistory.CONTENT_URI, null, null);
-            while( cursor.moveToNext() ){
-                fetchQuoteHistory(cursor.getString(cursor.getColumnIndex(QuoteColumns.SYMBOL)));
-            }
-        }
-    }
-
-    private void fetchQuoteHistory(String string) {
-
-    }*/
 
 }

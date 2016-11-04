@@ -11,6 +11,9 @@
     <string name="input_prefill"></string>
     <string name="network_toast">Uh-oh! This app requires an internet connection</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="stock_info_error">Unable to fetch stock info</string>
+    <string name="stock_symbol_invalid">Please enter valid symbol</string>
+    <string name="enter_symbol">Please enter Symbol</string>
+    <string name="symbol_exists">This stock is already saved!</string>
 </resources>
