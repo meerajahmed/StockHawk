@@ -13,4 +13,7 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="stock_widget_margin">8dp</dimen>
+    <dimen name="price_space">10sp</dimen>
+    <dimen name="change_space">3dp</dimen>
+
 </resources>
