@@ -2,6 +2,7 @@ package com.sam_chordas.android.stockhawk.service;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -17,6 +18,7 @@ import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import com.sam_chordas.android.stockhawk.rest.Utils;
 import com.sam_chordas.android.stockhawk.touch_helper.SimpleItemTouchHelperCallback;
+import com.sam_chordas.android.stockhawk.widget.StockWidgetProvider;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -138,8 +140,9 @@ public class StockTaskService extends GcmTaskService {
                     }
 
                     ArrayList quoteContentValues = Utils.quoteJsonToContentVals(getResponse);
-                    if( quoteContentValues != null && quoteContentValues.size() > 0 ){
+                    if (quoteContentValues != null && quoteContentValues.size() > 0) {
                         mContext.getContentResolver().applyBatch(QuoteProvider.AUTHORITY, quoteContentValues);
+                        mContext.sendBroadcast(new Intent(StockWidgetProvider.ACTION_STOCK_DB_UPDATE));
                     } else {
                         result = StockTaskService.INVALID_SYMBOL;
                     }
