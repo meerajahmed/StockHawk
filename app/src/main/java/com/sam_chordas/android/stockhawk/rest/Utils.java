@@ -4,6 +4,8 @@ import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
@@ -142,5 +144,11 @@ public class Utils {
         builder.withValue(QuoteHistoryColumns.BID_PRICE, truncateBidPrice(jsonObject.getString("Adj_Close")));
 
         return builder.build();
+    }
+
+    public static boolean isNetworkAvailable( Context context){
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }

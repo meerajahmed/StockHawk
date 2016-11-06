@@ -18,5 +18,5 @@
     <string name="symbol_exists">This stock is already saved!</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
-    <string name="stock_widget_empty">Stock info unavaiable</string>
+    <string name="stock_widget_empty">Stock info unavailable</string>
 </resources>
